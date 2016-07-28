@@ -1,22 +1,6 @@
 
-for i in "$@"
-do
-case $i in
-    -ip=*|--ip=*)
-    IP="${i#*=}"
-    shift # past argument=value
-    ;;
-    -h=*|--hostname=*)
-    HOST="${i#*=}"
-    shift # past argument=value
-    ;;
-    *)
-        # unknown option
-    ;;
-esac
-done
-
-echo "$HOST $IP"
+IP = $1
+HOST = $2
 
 #nsupdate
 #prereq HOST
