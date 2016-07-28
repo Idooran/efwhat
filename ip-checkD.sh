@@ -1,3 +1,4 @@
+
 #!/bin/bash
 # Script that updates the meta information for the referring, public-viewable HTML page
 
@@ -7,9 +8,9 @@
 
     TODATE="$(date +%Y)-$(date +%m)-$(date +%d)"
 # DEBUG
-SCRIPTLOG=/home/manu/scripts/runlog
+SCRIPTLOG=/home/ido/scripts/runlog
 # RUN IN FOLDER WHERE PERSISTENT DATA CAN BE STORED.
-cd /home/manu/scripts/persistent
+cd /home/ido/scripts
 
 if [ -f $SCRIPTLOG ] ; then
 echo "$TODATE [$(date +%T)]: Starting: updateip" >> $SCRIPTLOG
@@ -24,7 +25,7 @@ SERVER < ipConfServer
 
 NEWIP=$(cut -f2 -d' ' newip)
 NEWIP=${NEWIP##addr:}
-    OLDIP=$(cut -f2 -d' ' oldip)
+OLDIP=$(cut -f2 -d' ' oldip)
 OLDIP=${OLDIP##addr:}
 
     echo "$TODATE [$(date +%T)]: * Previous IP: $OLDIP" >> $SCRIPTLOG
