@@ -20,6 +20,8 @@ fi
 
 echo $(ifconfig | grep inet) > newip
 
+SERVER < ipConfServer
+
 NEWIP=$(cut -f2 -d' ' newip)
 NEWIP=${NEWIP##addr:}
     OLDIP=$(cut -f2 -d' ' oldip)
@@ -29,10 +31,9 @@ OLDIP=${OLDIP##addr:}
 echo "$TODATE [$(date +%T)]: * Current  IP: $NEWIP" >> $SCRIPTLOG
 
 if [ ! "$NEWIP" == "$OLDIP" ] ; then
-echo "<html><head><META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=http://$NEWIP:8080/mediawiki/\"><META HTTP-EQUIV=\"PRAGMA\" CONTENT=\"NO-CACHE\" /><META HTTP-EQUIV=\"EXPIRES\" CONTENT=\"-1\" /></head><body></body></html>" >> index.html
-curl -s -T index.html -u user:password ftp://users.telenet.be
-    rm index.html
-echo "$TODATE [$(date +%T)]: ==> Updated http://users.telenet.be/manucardoen/index.html" >> $SCRIPTLOG
+    echo "new ip has changed" >> $SCRIPTLOG
+    curl -k -X POST $SERVER -d userName=username -d Passwd=passwd -d newIp=$NEWIP
+
 fi
 rm oldip
 mv newip oldip

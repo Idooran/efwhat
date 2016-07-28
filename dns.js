@@ -5,7 +5,7 @@
 
         // run script locally as a child process with the above params
         return new Promise(function(resolve,reject){
-            exec('ip-check-daemon.sh ' + newIp+ ' ' + hostName, (err, stdout, stderr) => {
+            exec('ip-updater.sh' + newIp+ ' ' + hostName, (err, stdout, stderr) => {
                 var res = {};
 
                 if (err) {
