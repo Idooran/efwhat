@@ -16,6 +16,8 @@ case $i in
 esac
 done
 
-nsupdate
-prereq HOST
-update add HOST 300 A IP
+echo "$HOST $IP"
+
+#nsupdate
+#prereq HOST
+#update add HOST 300 A IP
