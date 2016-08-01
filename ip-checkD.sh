@@ -8,9 +8,9 @@
 
 TODATE="$(date +%Y)-$(date +%m)-$(date +%d)"
 # DEBUG
-SCRIPTLOG=/home/ido/scripts/runlog
-# RUN IN FOLDER WHERE PERSISTENT DATA CAN BE STORED.
-cd /home/ido/scripts
+SCRIPTLOG= /etc/efwat/runlog
+
+cd /etc/efwat/
 
 if [ -f $SCRIPTLOG ] ; then
 echo "$TODATE [$(date +%T)]: Starting: updateip" >> $SCRIPTLOG
@@ -28,14 +28,17 @@ NEWIP=${NEWIP##addr:}
 OLDIP=$(cut -f2 -d' ' oldip)
 OLDIP=${OLDIP##addr:}
 
-    echo "$TODATE [$(date +%T)]: * Previous IP: $OLDIP" >> $SCRIPTLOG
+echo "$TODATE [$(date +%T)]: * Previous IP: $OLDIP" >> $SCRIPTLOG
 echo "$TODATE [$(date +%T)]: * Current  IP: $NEWIP" >> $SCRIPTLOG
 
 if [ ! "$NEWIP" == "$OLDIP" ] ; then
     echo "new ip has changed" >> $SCRIPTLOG
-    curl -k -X POST $SERVER -d userName=username -d Passwd=passwd -d newIp=$NEWIP
-
+    TOKEN < token
+    HOST < host
+    echo "$TODATE [$(date +%T)]: * Sending IP ip update to efwat" >> $SCRIPTLOG
+    curl -k -X POST http://efwatns1.kannita.com:3000/api/update -d host=HOST -d newIp=IP -d token=TOKEN
 fi
+
 rm oldip
 mv newip oldip
 echo "$TODATE [$(date +%T)]: Finished: updateip" >> $SCRIPTLOG
