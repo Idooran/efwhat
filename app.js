@@ -164,7 +164,7 @@ app.get('/test',function(req,res){
     res.send({test:1});
 });
 
-app.listen(PORT,HOST, function () {
+app.listen(PORT, function () {
     console.log('Example app listening on port 3000!');
 });
 
