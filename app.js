@@ -154,6 +154,14 @@ app.post('/register', function (req, res) {
             }
         });
     }
+    else {
+        res.status(500).send("not all params been mentioned");
+    }
+
+});
+
+app.get('/test',function(req,res){
+    res.send({test:1});
 });
 
 app.listen(PORT,HOST, function () {
