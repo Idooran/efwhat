@@ -79,7 +79,7 @@ app.post('/api/update', function (req, res) {
 app.post('/authenticate', function (req, res) {
 
     User.findOne({
-        name: req.body.name
+        name: req.body.host
     }, function(err, user) {
 
         if (err) throw err;
@@ -89,7 +89,7 @@ app.post('/authenticate', function (req, res) {
         } else if (user) {
 
             // check if password matches
-            if (user.password != req.body.password) {
+            if (user.password != req.body.pass) {
                 res.json({ success: false, message: 'Authentication failed. Wrong password.' });
             } else {
 
