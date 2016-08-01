@@ -10,6 +10,8 @@ var User         = require('./user.js')
 
 var app = express();
 
+var HOST = "efwatns1.kannita.com";
+var PORT = 3000;
 
 var apiRoutes = express.Router();
 
@@ -69,6 +71,7 @@ app.post('/api/update', function (req, res) {
                 res.send({error:updateRes.err});
                 return;
             }
+
             res.send({success:true});
         })
 });
@@ -153,7 +156,7 @@ app.post('/register', function (req, res) {
     }
 });
 
-app.listen(3000, function () {
+app.listen(PORT,HOST, function () {
     console.log('Example app listening on port 3000!');
 });
 

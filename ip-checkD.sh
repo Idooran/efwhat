@@ -6,7 +6,7 @@
 # 2. If not, die
 # 3. if it has, upload new HTML file.
 
-    TODATE="$(date +%Y)-$(date +%m)-$(date +%d)"
+TODATE="$(date +%Y)-$(date +%m)-$(date +%d)"
 # DEBUG
 SCRIPTLOG=/home/ido/scripts/runlog
 # RUN IN FOLDER WHERE PERSISTENT DATA CAN BE STORED.
