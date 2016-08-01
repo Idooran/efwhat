@@ -4,11 +4,12 @@ var morgan      = require('morgan');
 var cors        = require('cors');
 var bodyParser  = require('body-parser');
 var jwt         = require('jsonwebtoken')
-var dns         = require('./dns.js');
-var User         = require('./user.js');
 
+var dns         = require('./dns.js');
+var User         = require('./user.js')
 
 var app = express();
+
 
 var apiRoutes = express.Router();
 
@@ -63,12 +64,12 @@ app.post('/api/update', function (req, res) {
     // Update DNS
     dns.updateIpRecord(hostName,newIp)
         .then(function(updateRes){
-            if(updateRes.error){
-                console.log('error occurred',updateRes.error);
-                res.status(500).end();
+            if(updateRes.err){
+                console.log('error occurred',updateRes.err);
+                res.send({error:updateRes.err});
                 return;
             }
-            res.send(updateRes.data);
+            res.send({success:true});
         })
 });
 
@@ -151,8 +152,6 @@ app.post('/register', function (req, res) {
         });
     }
 });
-
-
 
 app.listen(3000, function () {
     console.log('Example app listening on port 3000!');
