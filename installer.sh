@@ -4,7 +4,7 @@
 # once a token is recived
 
 sudo mkdir /etc/efwat
-cp token_fetcher.sh /etch/efwat/token_fetcher.sh
+cp token_fetcher.sh /etc/efwat/token_fetcher.sh
 cd /etc/efwat
 
 TODATE="$(date +%Y)-$(date +%m)-$(date +%d)"
