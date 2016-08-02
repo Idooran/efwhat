@@ -20,15 +20,17 @@ fi
 
 sudo cat /sys/class/net/eth0/address | tr : - > host
 
-HOST < cat host
+HOST=$(cat host)
 
-PASS=date| sha256sum | base64 | head -c 32 > pass
+date| sha256sum | base64 | head -c 32 > pass
+
+PASS=$(cat pass)
 
 echo "$TODATE [$(date +%T)]: * Mac address : $HOST" >> $SCRIPTLOG
 echo "$TODATE [$(date +%T)]: * Password Has Been Generated" >> $SCRIPTLOG
 echo "$TODATE [$(date +%T)]: * Registering Device To efwhat Service" >> $SCRIPTLOG
 
-curl -k -X POST http://efwatns1.kannita.com:3000/register -d host=HOST -d pass=PASS
+curl -k -X POST http://efwatns1.kannita.com:3000/register -d host=$HOST -d pass=$PASS
 
 # run script to get token and sotre it in token file
 
@@ -43,7 +45,7 @@ IP=$(ifconfig eth0 | awk '/inet addr/{print substr($2,6)}')
 echo "$TODATE [$(date +%T)]: * Device Current IP $IP" >> $SCRIPTLOG
 echo "$TODATE [$(date +%T)]: * Registering device to efwhat dns" >> $SCRIPTLOG
 
-curl -k -X POST http://efwatns1.kannita.com:3000/api/update -d host=HOST -d newIp=IP -d token=TOKEN
+curl -k -X POST http://efwatns1.kannita.com:3000/api/update -d host=$HOST -d newIp=$IP -d token=$TOKEN
 
 echo "$TODATE [$(date +%T)]: * Installing Ip checker daemon" >> $SCRIPTLOG
 
