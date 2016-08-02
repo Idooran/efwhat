@@ -33,10 +33,10 @@ echo "$TODATE [$(date +%T)]: * Current  IP: $NEWIP" >> $SCRIPTLOG
 
 if [ ! "$NEWIP" == "$OLDIP" ] ; then
     echo "new ip has changed" >> $SCRIPTLOG
-    TOKEN < token
-    HOST < host
+    TOKEN=$(cat token)
+    HOST=$(cat host)
     echo "$TODATE [$(date +%T)]: * Sending IP ip update to efwat" >> $SCRIPTLOG
-    curl -k -X POST http://efwatns1.kannita.com:3000/api/update -d host=HOST -d newIp=IP -d token=TOKEN
+    curl -k -X POST http://efwatns1.kannita.com:3000/api/update -d host=$HOST -d newIp=$NEWIP -d token=$TOKEN
     # if token is out of date then first get a new token and then do the action
 fi
 
