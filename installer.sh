@@ -18,7 +18,10 @@ echo "$TODATE [$(date +%T)]: Logfile created" >> $SCRIPTLOG
 echo "$TODATE [$(date +%T)]: Starting: updateip" >> $SCRIPTLOG
 fi
 
-HOST=sudo cat /sys/class/net/eth0/address | tr : - > host
+sudo cat /sys/class/net/eth0/address | tr : - > host
+
+HOST < cat host
+
 PASS=date| sha256sum | base64 | head -c 32 > pass
 
 echo "$TODATE [$(date +%T)]: * Mac address : $HOST" >> $SCRIPTLOG
