@@ -34,7 +34,7 @@ curl -k -X POST http://efwatns1.kannita.com:3000/register -d host=$HOST -d pass=
 
 # run script to get token and sotre it in token file
 
-sudo bash token_fetcher.sh HOST PASS
+sudo bash token_fetcher.sh $HOST $PASS
 
 echo "$TODATE [$(date +%T)]: * Token Been Received" >> $SCRIPTLOG
 
