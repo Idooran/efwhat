@@ -39,6 +39,11 @@
         return new Promise(function(resolve,error) {
 
             console.log('updating record %s with new ip %s',hostName,newIp);
+
+            if(hostName.indexOf("efwat.com") == -1){
+                hostName += "efwat.com";
+            }
+
             var args = {
                 zoneId: efWhatZoneId,
                 name: hostName,
