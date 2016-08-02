@@ -25,7 +25,7 @@ echo "$TODATE [$(date +%T)]: * Mac address : $HOST" >> $SCRIPTLOG
 echo "$TODATE [$(date +%T)]: * Password Has Been Generated" >> $SCRIPTLOG
 echo "$TODATE [$(date +%T)]: * Registering Device To efwhat Service" >> $SCRIPTLOG
 
-curl -k -X POST http://efwatns1.kannita.com:3000/register -d host=$1 -d pass=$2
+curl -k -X POST http://efwatns1.kannita.com:3000/register -d host=HOST -d pass=PASS
 
 # run script to get token and sotre it in token file
 
@@ -33,7 +33,7 @@ sudo bash token_fetcher.sh HOST PASS
 
 echo "$TODATE [$(date +%T)]: * Token Been Received" >> $SCRIPTLOG
 
-TOKEN < token
+TOKEN<token
 
 IP=ifconfig eth0 | awk '/inet addr/{print substr($2,6)}' > newIp
 
