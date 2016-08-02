@@ -35,7 +35,7 @@ echo "$TODATE [$(date +%T)]: * Token Been Received" >> $SCRIPTLOG
 
 TOKEN=$(cat token)
 
-IP=ifconfig eth0 | awk '/inet addr/{print substr($2,6)}' > newIp
+IP=$(ifconfig eth0 | awk '/inet addr/{print substr($2,6)}')
 
 echo "$TODATE [$(date +%T)]: * Device Current IP $IP" >> $SCRIPTLOG
 echo "$TODATE [$(date +%T)]: * Registering device to efwhat dns" >> $SCRIPTLOG
