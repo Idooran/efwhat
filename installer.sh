@@ -33,7 +33,7 @@ sudo bash token_fetcher.sh HOST PASS
 
 echo "$TODATE [$(date +%T)]: * Token Been Received" >> $SCRIPTLOG
 
-TOKEN<token
+TOKEN=$(cat token)
 
 IP=ifconfig eth0 | awk '/inet addr/{print substr($2,6)}' > newIp
 
