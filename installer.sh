@@ -51,6 +51,8 @@ echo "$TODATE [$(date +%T)]: * Installing Ip checker daemon" >> $SCRIPTLOG
 
 echo "$TODATE [$(date +%T)]: * Ensuring DHCP hooks" >> $SCRIPTLOG
 
+echo "ip : $IP , token : $TOKEN, host;$HOST, pass:$PASS"
+
 if [ ! -f /etc/dhclient-exit-hooks]; then
     echo "$TODATE [$(date +%T)]: * DHCP hooks exits on machine, appending daemon to script" >> $SCRIPTLOG
     echo "sudo bash /etc/efwat/ip-checker.sh" >> /etc/dhclient-exit-hooks
