@@ -18,7 +18,7 @@ echo "$TODATE [$(date +%T)]: Starting: updateip" >> $SCRIPTLOG
 fi
 
 
-HOST = /sys/class/net/eth0/address | tr : - > host
+HOST = cat /sys/class/net/eth0/address | tr : - > host
 PASS = date +%s | sha256sum | base64 | head -c 32 > pass
 
 echo "$TODATE [$(date +%T)]: * Mac address : $HOST" >> $SCRIPTLOG
@@ -55,8 +55,6 @@ else
     echo "sudo bash /etc/efwat/ip-checker.sh" >> /etc/dhclient-exit-hooks
 fi
 
-
-# if exitss then add your script to it
 
 
 
