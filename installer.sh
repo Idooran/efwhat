@@ -4,6 +4,7 @@ cp token_fetcher.sh /etc/efwat/token_fetcher.sh
 cd /etc/efwat
 
 TODATE="$(date +%Y)-$(date +%m)-$(date +%d)"
+
 SCRIPTLOG=runlog
 
 if [ -f $SCRIPTLOG ] ; then
@@ -36,7 +37,9 @@ echo "$TODATE [$(date +%T)]: * Token Been Received" >> $SCRIPTLOG
 
 TOKEN=$(cat token)
 
-IP=$(ifconfig eth0 | awk '/inet addr/{print substr($2,6)}')
+interface=$(ip route get 8.8.8.8 | awk -F"dev " 'NR==1 {split($2,a," ");print a[1]}')
+
+IP=$(ifconfig $interface | awk '/inet addr/{print substr($2,6)}')
 
 echo "$TODATE [$(date +%T)]: * Device Current IP $IP" >> $SCRIPTLOG
 echo "$TODATE [$(date +%T)]: * Registering device to efwhat dns" >> $SCRIPTLOG
