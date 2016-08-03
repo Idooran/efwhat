@@ -37,7 +37,7 @@ fi
 # Create Host and Random password
 
 if [ -z "$INTERFACE_PARAM" ]; then
-    INTERFACE=$(ip route get 8.8.8.8 | awk -F"dev " 'NR==1 {split($2,a," ");pri$
+    INTERFACE=$(ip route get 8.8.8.8 | awk -F"dev " 'NR==1 {split($2,a," ");print a[1]}')
 else
     INTERFACE=$INTERFACE_PARAM
 fi
