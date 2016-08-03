@@ -7,10 +7,11 @@ var jwt         = require('jsonwebtoken')
 
 var dns         = require('./dns.js');
 var User         = require('./user.js')
+var security     = require('./security.js');
+var configuration = require('./configuration.js')
 
 var app = express();
 
-var HOST = "efwatns1.kannita.com";
 var PORT = 3000;
 
 var apiRoutes = express.Router();
@@ -27,7 +28,7 @@ apiRoutes.use(function(req, res, next) {
         // verifies secret and checks exp
         jwt.verify(token, app.get('superSecret'), function(err, decoded) {
             if (err) {
-                return res.json({ success: false, message: 'Failed to authenticate token.' });
+                return res.status(403).send();
             } else {
                 // if everything is good, save to request for use in other routes
                 req.decoded = decoded;
@@ -47,7 +48,7 @@ apiRoutes.use(function(req, res, next) {
     }
 });
 
-app.set('superSecret',"hellow");
+app.set('superSecret',configuration.getKey("SECRET"));
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -56,6 +57,7 @@ app.use(bodyParser.urlencoded({
 }));
 // log every request to the console:
 app.use(morgan('dev'));
+
 app.use('/api',apiRoutes);
 
 app.post('/api/update', function (req, res) {
@@ -79,24 +81,23 @@ app.post('/api/update', function (req, res) {
 app.post('/authenticate', function (req, res) {
 
     User.findOne({
-        name: req.body.host
+        host: req.body.host
     }, function(err, user) {
 
         if (err) throw err;
 
         if (!user) {
-            res.json({ success: false, message: 'Authentication failed. User not found.' });
+            res.status(403).send();
         } else if (user) {
 
             // check if password matches
-            if (user.password != req.body.pass) {
-                res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+            if (security.decrypt(user.password) != req.body.pass) {
+                res.status(403).send();
             } else {
-
                 // if user is found and password is right
                 // create a token
                 var token = jwt.sign(user, app.get('superSecret'), {
-                    expiresIn : 1440 // expires in 24 hours
+                    expiresIn : 1440*100000 // expires never
                 });
 
                 // return the information including token as JSON
@@ -108,38 +109,15 @@ app.post('/authenticate', function (req, res) {
     });
 });
 
-app.get('/api/users', function (req, res) {
-
-    var newIp = req.body.newIp;
-    var hostName = req.body.hostName;
-    var oldIp = req.body.oldIp;
-    var token = req.body.token;
-
-    // DO verfications
-
-    // Update DNS
-    dns.updateIpRecord(hostName,newIp)
-        .then(function(updateRes){
-            if(updateRes.error){
-                console.log('error occurred',updateRes.error);
-                res.status(500).end();
-                return;
-            }
-
-            res.send(updateRes.data);
-        })
-});
-
 app.post('/register', function (req, res) {
 
-    // TODO HASH THIS PART
     var password = req.body.pass ;
-    var name = req.body.host;
+    var host = req.body.host;
 
-    if(name &&  password ){
+    if(host &&  password ){
         User.create({
-            name: name,
-            password: password,
+            host: host,
+            password: security.encrypt(password)
         }, function(err,user){
             if(err){
                 console.log('error while saving user ')
@@ -151,7 +129,7 @@ app.post('/register', function (req, res) {
         });
     }
     else {
-        res.status(500).send("not all params been mentioned");
+        res.status(403).send("not all params been mentioned");
     }
 
 });
