@@ -1,14 +1,9 @@
-# this the installer
-# should make a get call for our service
-# and get a token (this should be a diffrent script) [should be used from the daemon as well once a token is not valid)
-# once a token is recived
-
 sudo mkdir /etc/efwat
+# copy the token fetcher script into the working directory
 cp token_fetcher.sh /etc/efwat/token_fetcher.sh
 cd /etc/efwat
 
 TODATE="$(date +%Y)-$(date +%m)-$(date +%d)"
-# DEBUG
 SCRIPTLOG=runlog
 
 if [ -f $SCRIPTLOG ] ; then
@@ -18,6 +13,7 @@ echo "$TODATE [$(date +%T)]: Logfile created" >> $SCRIPTLOG
 echo "$TODATE [$(date +%T)]: Starting: updateip" >> $SCRIPTLOG
 fi
 
+# Create Host and Random password
 sudo cat /sys/class/net/eth0/address | tr : - > host
 
 HOST=$(cat host)
@@ -32,7 +28,7 @@ echo "$TODATE [$(date +%T)]: * Registering Device To efwhat Service" >> $SCRIPTL
 
 curl -k -X POST http://efwatns1.kannita.com:3000/register -d host=$HOST -d pass=$PASS
 
-# run script to get token and sotre it in token file
+# run script to get token and store it in token file
 
 sudo bash token_fetcher.sh $HOST $PASS
 
@@ -45,14 +41,14 @@ IP=$(ifconfig eth0 | awk '/inet addr/{print substr($2,6)}')
 echo "$TODATE [$(date +%T)]: * Device Current IP $IP" >> $SCRIPTLOG
 echo "$TODATE [$(date +%T)]: * Registering device to efwhat dns" >> $SCRIPTLOG
 
+# register device ip to efwat service
 curl -k -X POST http://efwatns1.kannita.com:3000/api/update -d host=$HOST -d newIp=$IP -d token=$TOKEN
 
 echo "$TODATE [$(date +%T)]: * Installing Ip checker daemon" >> $SCRIPTLOG
-
 echo "$TODATE [$(date +%T)]: * Ensuring DHCP hooks" >> $SCRIPTLOG
-
 echo "ip : $IP , token : $TOKEN, host;$HOST, pass:$PASS"
 
+# Append the ip-checker to the dhcp hooks
 if [ ! -f /etc/dhclient-exit-hooks]; then
     echo "$TODATE [$(date +%T)]: * DHCP hooks exits on machine, appending daemon to script" >> $SCRIPTLOG
     echo "sudo bash /etc/efwat/ip-checker.sh" >> /etc/dhclient-exit-hooks
