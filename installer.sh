@@ -43,9 +43,9 @@ else
 fi
 
 if [ -z "$SERVER_PARAM" ]; then
-    SERVER=$(ip route get 8.8.8.8 | awk -F"dev " 'NR==1 {split($2,a," ");pri$
+    SERVER="http://efwatns1.kannita.com:3000"
 else
-    SERVER="http://efwatns1.kannita.com:3000/"
+    SERVER=$SERVER_PARAM
 fi
 
 echo "$TODATE [$(date +%T)]: Working with device interface $INTERFACE" >> $SCRIPTLOG
@@ -53,6 +53,9 @@ echo "$TODATE [$(date +%T)]: Working with server $SERVER" >> $SCRIPTLOG
 
 HOST=$(sudo cat /sys/class/net/$INTERFACE/address | tr : -)
 PASS=$(date| sha256sum | base64 | head -c 32)
+
+echo "interface : $INTERFACE"
+
 IP=$(ifconfig $INTERFACE | awk '/inet addr/{print substr($2,6)}')
 
 echo "$TODATE [$(date +%T)]: * Device Current IP $IP" >> $SCRIPTLOG
