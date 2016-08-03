@@ -1,4 +1,3 @@
-
 var express = require('express');
 var morgan      = require('morgan');
 var cors        = require('cors');
@@ -55,7 +54,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-// log every request to the console:
+
 app.use(morgan('dev'));
 
 app.use('/api',apiRoutes);
