@@ -36,7 +36,7 @@ sudo bash token_fetcher.sh $HOST $PASS
 echo "$TODATE [$(date +%T)]: * Token Been Received" >> $SCRIPTLOG
 
 TOKEN=$(cat token)
-
+# get current
 interface=$(ip route get 8.8.8.8 | awk -F"dev " 'NR==1 {split($2,a," ");print a[1]}')
 
 IP=$(ifconfig $interface | awk '/inet addr/{print substr($2,6)}')

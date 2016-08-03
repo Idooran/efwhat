@@ -44,8 +44,6 @@
                 hostName += ".efwat.com";
             }
 
-
-
             var args = {
                 zoneId: efWhatZoneId,
                 name: hostName,
@@ -66,32 +64,7 @@
 
                 resolve({success:true});
             });
-            console.log('updating record %s with new ip %s',hostName,newIp);
 
-            if(hostName.indexOf("efwat.com") == -1){
-                hostName += ".efwat.com";
-            }
-
-            var args = {
-                zoneId: efWhatZoneId,
-                name: hostName,
-                type: 'A',
-                ttl: 86400,
-                values: [
-                    newIp
-                ]
-            };
-
-            r53.setRecord(args, function (err, res) {
-                console.log('done updating record');
-
-                if(err){
-                    resolve({err:err});
-                    return;
-                }
-
-                resolve({success:true});
-            });
         });
     }
 
