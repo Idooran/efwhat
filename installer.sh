@@ -2,6 +2,10 @@
 sudo mkdir /etc/efwat
 # copy the token fetcher script into the working directory
 cp token_fetcher.sh /etc/efwat/token_fetcher.sh
+sudo cp ip-checker.sh /etc/efwat/ip-checker.sh
+sudo chmod a+x /etc/efwat/token_fetcher.sh
+sudo chmod a+x /etc/efwat/ip-checker.sh
+
 cd /etc/efwat
 
 while [[ $# -gt 1 ]]
@@ -85,17 +89,9 @@ echo "SERVER=$SERVER" >> config
 echo "PASS=$PASS" >> config
 echo "INTERFACE=$INTERFACE" >> config
 
-# Append the ip-checker to the dhcp hooks
-if [ ! -f /etc/dhclient-exit-hooks]; then
-    echo "$TODATE [$(date +%T)]: * DHCP hooks exits on machine, appending daemon to script" >> $SCRIPTLOG
-    echo "sudo bash /etc/efwat/ip-checker.sh" >> /etc/dhclient-exit-hooks
-else
-    echo "$TODATE [$(date +%T)]: * DHCP hooks not exits on machine, creating new exit hook" >> $SCRIPTLOG
-    sudo touch /etc/dhclient-exit-hooks
-    chmod +x /etc/dhclient-exit-hooks
-    echo "sudo bash /etc/efwat/ip-checker.sh" >> /etc/dhclient-exit-hooks
-fi
+# Append the ip-checker to crontab
 
+(crontab -l 2>/dev/null; echo "*/20 * * * * bash /etc/efwat/ip-checker.sh") | crontab -
 
 
 

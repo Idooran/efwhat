@@ -1,4 +1,3 @@
-
 #!/bin/bash
 # Script that updates the meta information for the referring, public-viewable HTML page
 
@@ -22,7 +21,7 @@ fi
 source /etc/efwat/config
 SERVER_PARAM=$SERVER
 INTERFACE_PARAM=$INTERFACE
-echo $(ifconfig INTERFACE_PARAM | awk '/inet addr/{print substr($2,6)}') > newip
+sudo echo $(ifconfig INTERFACE_PARAM | awk '/inet addr/{print substr($2,6)}') > newip
 
 NEWIP=$(cat newip)
 OLDIP=$(cat oldip)
@@ -39,6 +38,6 @@ if [ ! "$NEWIP" == "$OLDIP" ] ; then
     # if token is out of date then first get a new token and then do the action
 fi
 
-rm oldip
-mv newip oldip
+sudo rm oldip
+sudo mv newip oldip
 echo "$TODATE [$(date +%T)]: Finished: updateip" >> $SCRIPTLOG
